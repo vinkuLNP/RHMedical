@@ -1,0 +1,70 @@
+﻿@page "/"
+@inject RHMedical.Infrastructure.Users.UserManagementService UserManagementService
+@using System.ComponentModel.DataAnnotations
+@using RHMedical.Application.Users
+
+<MudPaper Class="pa-6" MaxWidth="600px">
+    <MudText Typo="Typo.h5">Invite Attorney</MudText>
+
+    <MudForm @ref="_form">
+        <MudTextField @bind-Value="_email" InputType="InputType.Email" Label="Email" Class="mt-4" Required="true"
+                      RequiredError="Email is required" Validation="@(new EmailAddressAttribute
+                      {
+                          ErrorMessage = "Please enter a valid email address"
+                      })" />
+        <MudTextField @bind-Value="_fullName" Label="Full Name" Class="mt-4" Required="true"
+                      RequiredError="Full name is required" />
+
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Class="mt-4"
+                   OnClick="InviteUser">
+            Send Invite
+        </MudButton>
+    </MudForm>
+    @if (!string.IsNullOrWhiteSpace(_message))
+    {
+        <MudAlert Severity="Severity.Info" Class="mt-4">
+            @_message
+        </MudAlert>
+    }
+</MudPaper>
+@code {
+    private MudForm? _form;
+    private string _email = string.Empty;
+    private string _fullName = string.Empty;
+    private string _message = string.Empty;
+    private Severity _severity = Severity.Info;
+
+    private async Task InviteUser()
+    {
+        await _form!.ValidateAsync();
+
+        if (!_form.IsValid)
+            return;
+
+        try
+        {
+            var request = new InviteUserRequest
+            {
+                FullName = _fullName,
+                Email = _email,
+                RedirectUrl = "https://localhost:7135/dashboard"
+            };
+
+            var userId = await UserManagementService.InviteUserAsync(request);
+
+            _severity = Severity.Success;
+            _message = $"Invitation sent and user saved. User Id: {userId}";
+
+            _email = string.Empty;
+            _fullName = string.Empty;
+            await _form.ResetAsync();
+        }
+        catch (Exception ex)
+        {
+            _severity = Severity.Error;
+            _message = ex.Message;
+        }
+    }
+}

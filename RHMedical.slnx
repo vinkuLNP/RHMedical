@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="RHMedical.Application/RHMedical.Application.csproj" Id="bd9c67d5-8707-4006-8ec4-2fbed482bf40" />
+  <Project Path="RHMedical.Domain/RHMedical.Domain.csproj" Id="87abfdc6-b3ce-44fc-ad0b-4ad221836226" />
   <Project Path="RHMedical.Infrastructure/RHMedical.Infrastructure.csproj" Id="60579cdd-c19e-4bc6-9fca-f782d84e0680" />
   <Project Path="RHMedical.Web/RHMedical.Web.csproj" />
 </Solution>

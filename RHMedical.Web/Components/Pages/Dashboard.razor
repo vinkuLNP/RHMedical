@@ -1,0 +1,27 @@
+﻿@page "/dashboard"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<MudText Typo="Typo.h4">Dashboard</MudText>
+<MudText>Welcome to RH Medical Portal</MudText>
+
+<CascadingAuthenticationState>
+
+    <AuthorizeView>
+
+        <Authorized>
+
+            Hello @context.User.Identity?.Name
+
+        </Authorized>
+
+    </AuthorizeView>
+
+</CascadingAuthenticationState>
+
+
+@code {
+
+}

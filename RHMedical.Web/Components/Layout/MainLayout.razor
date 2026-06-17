@@ -1,23 +1,156 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
+<MudLayout>
+    <MudAppBar Elevation="0" Class="app-topbar">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="Color.Inherit"
+                       Edge="Edge.Start"
+                       OnClick="DrawerToggle" />
+        <MudText Typo="Typo.h5" Class="ml-3">RH Medical Portal</MudText>
+        <MudSpacer />
+        <MudItem xs="2">
+            <MudTextField @bind-Value="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" Class="mr-3" />
+        </MudItem>
+        <div Class="d-flex align-center mt-4 pr-6">
+            <MudBadge Content="100" Color="Color.Primary" Overlap="true">
+                <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Default" />
+            </MudBadge>
         </div>
+        <MudBadge Color="Color.Success" Overlap="true" Bordered="true" Class="mx-3">
+            <MudAvatar>
+                <MudImage Src="images/jonny.jpg" />
+            </MudAvatar>
+        </MudBadge>
+        <MudIconButton Icon="@DarkLightModeButtonIcon"
+                       Color="Color.Inherit"
+                       OnClick="DarkModeToggle" />
+    </MudAppBar>
+    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent Class="pt-20 px-4 pb-10">
+        @Body
+    </MudMainContent>
+</MudLayout>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    private bool _drawerOpen = true;
+    private bool _isDarkMode = false;
+    private MudTheme _theme = new();
+    public string Search { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _theme = new()
+        {
+            PaletteLight = _lightPalette,
+            PaletteDark = _darkPalette,
+            LayoutProperties = new LayoutProperties()
+        };
+    }
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void DarkModeToggle()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+
+    private readonly PaletteLight _lightPalette = new()
+    {
+        Primary = "#1E3A8A",
+        Secondary = "#4F46E5",
+
+        Success = "#16A34A",
+        Warning = "#EA580C",
+        Error = "#DC2626",
+        Info = "#2563EB",
+
+        Background = "#F8FAFC",
+        BackgroundGray = "#F1F5F9",
+        Surface = "#FFFFFF",
+
+        AppbarBackground = "#FFFFFF",
+        AppbarText = "#0F172A",
+
+        DrawerBackground = "#0B1F3A",
+        DrawerText = "#E5E7EB",
+        DrawerIcon = "#CBD5E1",
+
+        TextPrimary = "#0F172A",
+        TextSecondary = "#64748B",
+
+        GrayLight = "#E2E8F0",
+        GrayLighter = "#F8FAFC",
+
+        LinesDefault = "#E2E8F0",
+        TableLines = "#E2E8F0",
+        Divider = "#E2E8F0"
+    };
+
+    private readonly PaletteDark _darkPalette = new()
+    {
+        Primary = "#60A5FA",
+        Secondary = "#818CF8",
+
+        Success = "#22C55E",
+        Warning = "#F97316",
+        Error = "#F87171",
+        Info = "#38BDF8",
+
+        Background = "#0F172A",
+        BackgroundGray = "#111827",
+        Surface = "#1E293B",
+
+        AppbarBackground = "#111827",
+        AppbarText = "#F8FAFC",
+
+        DrawerBackground = "#020617",
+        DrawerText = "#CBD5E1",
+        DrawerIcon = "#94A3B8",
+
+        TextPrimary = "#F8FAFC",
+        TextSecondary = "#CBD5E1",
+        TextDisabled = "#64748B",
+
+        ActionDefault = "#CBD5E1",
+        ActionDisabled = "#64748B",
+        ActionDisabledBackground = "#334155",
+
+        GrayLight = "#334155",
+        GrayLighter = "#1E293B",
+
+        LinesDefault = "#334155",
+        TableLines = "#334155",
+        Divider = "#334155",
+
+        OverlayLight = "#0F172A80"
+    };
+
+    public string DarkLightModeButtonIcon => _isDarkMode switch
+    {
+        true => Icons.Material.Rounded.AutoMode,
+        false => Icons.Material.Outlined.DarkMode,
+    };
+}
+
+<style>
+    .app-topbar {
+        border-bottom: 1px solid var(--mud-palette-divider);
+        backdrop-filter: blur(12px);
+    }
+</style>
