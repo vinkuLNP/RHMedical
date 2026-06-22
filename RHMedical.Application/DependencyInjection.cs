@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RHMedical.Infrastructure.Identity;
-using RHMedical.Infrastructure.Persistence;
-using RHMedical.Infrastructure.Users;
-using Microsoft.EntityFrameworkCore;
+using RHMedical.Application.Identity;
+using RHMedical.Application.Users;
+using RHMedical.Data.Persistence;
 
-namespace RHMedical.Infrastructure
+namespace RHMedical.Application
 {
     public static class DependencyInjection
     {

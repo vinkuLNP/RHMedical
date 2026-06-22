@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RHMedical.Infrastructure.Persistence;
+using RHMedical.Data.Persistence;
 
 #nullable disable
 
-namespace RHMedical.Infrastructure.Persistence.Migrations
+namespace RHMedical.Data.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

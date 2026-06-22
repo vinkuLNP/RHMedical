@@ -1,7 +1,7 @@
 ﻿@page "/"
-@inject RHMedical.Infrastructure.Users.UserManagementService UserManagementService
 @using System.ComponentModel.DataAnnotations
-@using RHMedical.Application.Users
+@inject RHMedical.Application.Users.UserManagementService UserManagementService
+@using RHMedical.Infrastructure.ViewModel
 
 <MudPaper Class="pa-6" MaxWidth="600px">
     <MudText Typo="Typo.h5">Invite Attorney</MudText>
@@ -45,7 +45,7 @@
 
         try
         {
-            var request = new InviteUserRequest
+            var request = new InviteUserViewModel
             {
                 FullName = _fullName,
                 Email = _email,

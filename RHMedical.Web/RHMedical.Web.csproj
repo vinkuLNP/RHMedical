@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RHMedical.Infrastructure\RHMedical.Infrastructure.csproj" />
+    <ProjectReference Include="..\RHMedical.Application\RHMedical.Application.csproj" />
   </ItemGroup>
 
 </Project>

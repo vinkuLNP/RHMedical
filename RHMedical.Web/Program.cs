@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
-using RHMedical.Infrastructure;
-using RHMedical.Infrastructure.Users;
+using RHMedical.Application;
+using RHMedical.Application.Users;
+using RHMedical.Data.Persistence;
 using RHMedical.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +22,6 @@ builder.Services
     .AddMicrosoftIdentityWebApp(options =>
     {
         builder.Configuration.Bind("AzureAd", options);
-        Console.WriteLine($"CallbackPath={options.CallbackPath}");
-        Console.WriteLine($"SignedOutCallbackPath={options.SignedOutCallbackPath}");
         options.Events ??= new OpenIdConnectEvents();
 
         options.Events.OnTokenValidated = async context =>
@@ -58,6 +58,13 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+//automatic run migrations
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -74,7 +81,7 @@ app.MapGet("/logout", async context =>
         OpenIdConnectDefaults.AuthenticationScheme,
         new AuthenticationProperties
         {
-            RedirectUri =  builder.Configuration["Application:LoginUrl"]
+            RedirectUri = builder.Configuration["Application:LoginUrl"]
         });
 });
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);

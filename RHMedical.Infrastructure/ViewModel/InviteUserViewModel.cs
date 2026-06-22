@@ -1,8 +1,7 @@
-﻿namespace RHMedical.Application.Users
+﻿namespace RHMedical.Infrastructure.ViewModel
 {
-    public class InviteUserRequest
+    public class InviteUserViewModel
     {
-
         public string FullName { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;

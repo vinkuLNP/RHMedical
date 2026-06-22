@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RHMedical.Infrastructure.Identity
+﻿namespace RHMedical.Infrastructure.ViewModel
 {
-    public class AzureInviteResult
+    public class AzureInviteViewModel
     {
         public bool Success { get; set; }
         public string AzureObjectId { get; set; } = string.Empty;

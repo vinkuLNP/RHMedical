@@ -2,8 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
+using RHMedical.Infrastructure.ViewModel;
 
-namespace RHMedical.Infrastructure.Identity
+namespace RHMedical.Application.Identity
 {
     public class AzureB2BInviteService
     {
@@ -25,7 +26,7 @@ namespace RHMedical.Infrastructure.Identity
                 new[] { "https://graph.microsoft.com/.default" });
         }
 
-        public async Task<AzureInviteResult> InviteUserAsync(
+        public async Task<AzureInviteViewModel> InviteUserAsync(
         string email,
         string fullName,
         string redirectUrl)
@@ -43,13 +44,13 @@ namespace RHMedical.Infrastructure.Identity
 
             if (result?.InvitedUser?.Id == null)
             {
-                return new AzureInviteResult
+                return new AzureInviteViewModel
                 {
                     Success = false
                 };
             }
 
-            return new AzureInviteResult
+            return new AzureInviteViewModel
             {
                 Success = true,
                 AzureObjectId = result.InvitedUser.Id,

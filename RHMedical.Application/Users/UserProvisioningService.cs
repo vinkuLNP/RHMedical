@@ -1,8 +1,8 @@
-﻿using RHMedical.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using RHMedical.Infrastructure.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using RHMedical.Data.Persistence;
+using RHMedical.Domain.Entities;
 
-namespace RHMedical.Infrastructure.Users
+namespace RHMedical.Application.Users
 {
     public class UserProvisioningService
     {
@@ -13,7 +13,7 @@ namespace RHMedical.Infrastructure.Users
             _db = db;
         }
 
-        public async Task<User> ProvisionUserAsync(string azureObjectId,string email,string fullName)
+        public async Task<User> ProvisionUserAsync(string azureObjectId, string email, string fullName)
         {
             var user = await _db.Users
                 .FirstOrDefaultAsync(x => x.AzureObjectId == azureObjectId);
@@ -36,7 +36,7 @@ namespace RHMedical.Infrastructure.Users
             }
             else
             {
-                user.InvitationAcceptedAt ??= DateTime.UtcNow;
+                user.InvitationAcceptedAt = DateTime.UtcNow;
                 user.LastLoginAt = DateTime.UtcNow;
             }
 

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RHMedical.Application.Users;
+using RHMedical.Application.Identity;
+using RHMedical.Data.Persistence;
 using RHMedical.Domain.Entities;
-using RHMedical.Infrastructure.Identity;
-using RHMedical.Infrastructure.Persistence;
+using RHMedical.Infrastructure.ViewModel;
 
-namespace RHMedical.Infrastructure.Users
+namespace RHMedical.Application.Users
 {
     public class UserManagementService
     {
@@ -19,7 +19,7 @@ namespace RHMedical.Infrastructure.Users
             _inviteService = inviteService;
         }
 
-        public async Task<Guid> InviteUserAsync(InviteUserRequest request)
+        public async Task<Guid> InviteUserAsync(InviteUserViewModel request)
         {
             var email = request.Email.Trim().ToLower();
 
