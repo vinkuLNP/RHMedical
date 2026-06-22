@@ -28,7 +28,7 @@ builder.Services
         {
             var userProvisioningService =
                 context.HttpContext.RequestServices
-                    .GetRequiredService<UserProvisioningService>();
+                    .GetRequiredService<IUserProvisioningService>();
 
             var claims = context.Principal!.Claims;
 

@@ -4,7 +4,7 @@ using RHMedical.Domain.Entities;
 
 namespace RHMedical.Application.Users
 {
-    public class UserProvisioningService
+    public class UserProvisioningService : IUserProvisioningService
     {
         private readonly AppDbContext _db;
 

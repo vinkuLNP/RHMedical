@@ -6,7 +6,7 @@ using RHMedical.Infrastructure.ViewModel;
 
 namespace RHMedical.Application.Users
 {
-    public class UserManagementService
+    public class UserManagementService : IUserManagementService
     {
         private readonly AppDbContext _db;
         private readonly AzureB2BInviteService _inviteService;
@@ -70,6 +70,35 @@ namespace RHMedical.Application.Users
             await _db.SaveChangesAsync();
 
             return user.Id;
+        }
+
+        public async Task<List<UserViewModel>> GetUsersAsync()
+        {
+            return await _db.Users.AsNoTracking()
+              .OrderByDescending(x => x.InvitationSentAt)
+              .Select(x => new UserViewModel
+              {
+                 Id = x.Id,
+                 Email = x.Email,
+                 FullName = x.FullName,
+                 Status = x.Status,
+                 IsActive = x.IsActive,
+                 InvitationSentAt = x.InvitationSentAt,
+                 LastLoginAt = x.LastLoginAt,
+              }).ToListAsync();
+        }
+
+        public async Task ToggleUserStatusAsync(Guid userId)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
+            if (user == null)
+                throw new InvalidOperationException("User not found.");
+
+            user.IsActive = !user.IsActive;
+            user.Status = user.IsActive ? "Active" : "Inactive";
+
+            await _db.SaveChangesAsync();
         }
     }
 }

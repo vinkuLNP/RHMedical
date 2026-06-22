@@ -16,8 +16,8 @@ namespace RHMedical.Application
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<AzureB2BInviteService>();
-            services.AddScoped<UserManagementService>();
-            services.AddScoped<UserProvisioningService>();
+            services.AddScoped<IUserManagementService, UserManagementService>();
+            services.AddScoped<IUserProvisioningService, UserProvisioningService>();
             return services;
         }
     }

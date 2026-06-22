@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RHMedical.Infrastructure.ViewModel
 {
-    public class UserVM
+    public class UserViewModel
     {
         public Guid Id { get; set; }
 

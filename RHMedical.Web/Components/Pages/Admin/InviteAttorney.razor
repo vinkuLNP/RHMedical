@@ -1,6 +1,7 @@
 ﻿@page "/"
+@using RHMedical.Application.Users
 @using System.ComponentModel.DataAnnotations
-@inject RHMedical.Application.Users.UserManagementService UserManagementService
+@inject IUserManagementService UserManagementService
 @using RHMedical.Infrastructure.ViewModel
 
 <MudPaper Class="pa-6" MaxWidth="600px">

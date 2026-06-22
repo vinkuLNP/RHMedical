@@ -1,5 +1,120 @@
-﻿<h3>Users</h3>
+﻿@page "/admin/users"
+@inject IUserManagementService UserManagementService
+@using RHMedical.Infrastructure.ViewModel
+@using RHMedical.Application.Users
+@using RHMedical.Application.Common
+@inject ISnackbar Snackbar
+
+<MudPaper Class="pa-6">
+
+    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+        <MudText Typo="Typo.h5">Manage Users</MudText>
+
+        <MudButton Href="/"
+                   Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.PersonAdd">
+            Invite User
+        </MudButton>
+    </MudStack>
+
+    <MudDivider Class="my-4" />
+
+    @if (_loading)
+    {
+        <MudStack AlignItems="AlignItems.Center" Class="pa-6">
+            <MudProgressCircular Indeterminate="true" />
+        </MudStack>
+    }
+    else
+    {
+        <MudTable Items="_users" Hover="true" Dense="true" Bordered="false" Striped="true">
+
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Email</MudTh>
+                <MudTh>Status</MudTh>
+                <MudTh>Invitation Sent</MudTh>
+                <MudTh>Last Login</MudTh>
+                <MudTh>Active</MudTh>
+                <MudTh>Action</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd>@context.FullName</MudTd>
+                <MudTd>@context.Email</MudTd>
+
+                <MudTd>
+                    <MudChip T="string" Color="@GetStatusColor(context.Status)" Size="Size.Small">
+                        @context.Status
+                    </MudChip>
+                </MudTd>
+
+                <MudTd>@context.InvitationSentAt.ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")</MudTd>
+
+                <MudTd>
+                    @(context.LastLoginAt.HasValue
+                        ? context.LastLoginAt.Value.ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
+                        : "-")
+                </MudTd>
+
+                <MudTd>
+                    <MudSwitch T="bool"
+                               Value="@context.IsActive"
+                               Color="Color.Success"
+                               ValueChanged="async _ => await ToggleUser(context.Id)" />
+                </MudTd>
+
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.Visibility"
+                                   Color="Color.Primary"
+                                   Size="Size.Small" />
+                </MudTd>
+            </RowTemplate>
+
+        </MudTable>
+    }
+
+</MudPaper>
 
 @code {
+    private List<UserViewModel> _users = new();
+    private bool _loading = true;
 
+    protected override async Task OnInitializedAsync()
+    {   
+        await LoadUsers();
+    }
+
+    private async Task LoadUsers()
+    {
+        _loading = true;
+        _users = await UserManagementService.GetUsersAsync();
+        _loading = false;
+    }
+
+    private async Task ToggleUser(Guid userId)
+    {
+        try
+        {
+            await UserManagementService.ToggleUserStatusAsync(userId);
+            await LoadUsers();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    private Color GetStatusColor(string status)
+    {
+        return status switch
+        {
+            UserStatuses.Active => Color.Success,
+            UserStatuses.Invited => Color.Info,
+            UserStatuses.Inactive => Color.Warning,
+            _ => Color.Default
+        };
+    }
 }
