@@ -95,7 +95,12 @@ namespace RHMedical.Application.Users
             if (user == null)
                 throw new InvalidOperationException("User not found.");
 
-            user.IsActive = !user.IsActive;
+            var newStatus = !user.IsActive;
+
+            await _inviteService.SetUserAccountEnabledAsync(user.AzureObjectId,newStatus);
+
+
+            user.IsActive = newStatus;
             user.Status = user.IsActive ? "Active" : "Inactive";
 
             await _db.SaveChangesAsync();

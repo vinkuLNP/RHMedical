@@ -3,6 +3,7 @@
 @using System.ComponentModel.DataAnnotations
 @inject IUserManagementService UserManagementService
 @using RHMedical.Infrastructure.ViewModel
+@inject NavigationManager Navigation
 
 <MudPaper Class="pa-6" MaxWidth="600px">
     <MudText Typo="Typo.h5">Invite Attorney</MudText>
@@ -61,6 +62,7 @@
             _email = string.Empty;
             _fullName = string.Empty;
             await _form.ResetAsync();
+            Navigation.NavigateTo("/admin/users");
         }
         catch (Exception ex)
         {

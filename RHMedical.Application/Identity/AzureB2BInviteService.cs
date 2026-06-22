@@ -58,5 +58,15 @@ namespace RHMedical.Application.Identity
                 InviteRedeemUrl = result.InviteRedeemUrl
             };
         }
+
+        public async Task SetUserAccountEnabledAsync(string azureObjectId, bool isEnabled)
+        {
+            var user = new Microsoft.Graph.Models.User
+            {
+                AccountEnabled = isEnabled
+            };
+
+            await _graphClient.Users[azureObjectId].PatchAsync(user);
+        }
     }
 }
